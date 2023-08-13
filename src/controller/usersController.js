@@ -32,8 +32,22 @@ const signUp = async (req, res) => {
 
 
 const signIn = async (req, res) => {
-    console.log(req.body);
-    
+    try {
+      const user = await User.findOne({ email: req.body.email });
+      if (!user) {
+        return res.status(404).json({ message: "user not found" });
+      }
+      if (!(await bcrypt.compare(req.body.password, user.password))) {
+        return res.status(400).json({ message: "invalid credentials" });
+      }
+      const { password, ...data } = await user.toJSON();
+      console.log(data);
+      const token = jwt.sign({ id: user._id }, "hello");
+  
+      res.json({ message: "succes", token: token });
+    } catch (error) {
+      res.status(500).json({ error: "Internal server error" });
+    }
   }
 
 module.exports = {signUp,signIn}
