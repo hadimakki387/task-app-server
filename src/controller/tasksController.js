@@ -1,22 +1,23 @@
 const Task = require("../models/TaskSchema");
+const jwt = require("jsonwebtoken");
 
 const getTasks = async (req, res) => {
-  console.log(req.query)
-  try {
+  const claims = jwt.verify(req.query.userID, "hello");
+  
+  if(req.query.userID){
+    try {
+   
     let tasks
     if(req.query.cat === "All"){
-      tasks = await Task.find({taskOwner:req.query.userID});
+      tasks = await Task.find({taskOwner:claims.id});
     }
     if(req.query.cat === "notDone"){
-      tasks = await Task.find({isDone:false,taskOwner:req.query.userID});
+      tasks = await Task.find({isDone:false,taskOwner:claims.id});
       console.log(tasks)
     }
     if(req.query.cat === "Done"){
-      tasks = await Task.find({isDone:true,taskOwner:req.query.userID});
+      tasks = await Task.find({isDone:true,taskOwner:claims.id});
     }
-
-    
- 
     const { page, limit } = req.query;
 
     const startIndex = (page - 1) * limit;
@@ -31,11 +32,22 @@ const getTasks = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
   }
+  }else{
+    res.status(404).json({ error: "unauthorized" });
+  }
+  
 };
 
 const addTask = async (req, res) => {
+  const claims = jwt.verify(req.body.token, "hello");
+  console.log(req.body)
   try {
-    const task = new Task(req.body);
+    const task = new Task({
+      title:req.body.title,
+      dueDate:req.body.dueDate,
+      description:req.body.description,
+      taskOwner:claims.id
+    });
     await task.save();
     res.json({ message: "Task added" });
   } catch (error) {
