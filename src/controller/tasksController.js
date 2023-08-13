@@ -44,7 +44,17 @@ const addTask = async (req, res) => {
 };
 
 const removeTask = async (req, res) => {
-  console.log(req.body)
+  try {
+    const { taskId } = req.body;
+    const id = taskId.id
+    if (!id) {
+      return res.status(400).json({ error: "Task ID is required" });
+    }
+    await Task.findByIdAndRemove(id);
+    res.json({ message: "Task deleted" });
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
 }
 
 module.exports = { getTasks, addTask ,removeTask};
