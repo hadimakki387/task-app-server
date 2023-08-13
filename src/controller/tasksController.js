@@ -56,5 +56,13 @@ const removeTask = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 }
+const setTaskDone = async (req, res) => {
+  try {
+    await Task.findOneAndUpdate({ _id: req.body.id }, { isDone: true });
+    res.json({ message: "Task Done" });
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
 
-module.exports = { getTasks, addTask ,removeTask};
+module.exports = { getTasks, addTask ,removeTask,setTaskDone};
