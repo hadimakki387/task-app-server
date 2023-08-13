@@ -1,18 +1,22 @@
 const Task = require("../models/TaskSchema");
+const jwt = require("jsonwebtoken");
 
 const getTasks = async (req, res) => {
-  console.log(req.query)
-  try {
+  const claims = jwt.verify(req.query.userID, "hello");
+  
+  if(req.query.userID){
+    try {
+   
     let tasks
     if(req.query.cat === "All"){
-      tasks = await Task.find({taskOwner:req.query.userID});
+      tasks = await Task.find({taskOwner:claims.id});
     }
     if(req.query.cat === "notDone"){
-      tasks = await Task.find({isDone:false,taskOwner:req.query.userID});
+      tasks = await Task.find({isDone:false,taskOwner:claims.id});
       console.log(tasks)
     }
     if(req.query.cat === "Done"){
-      tasks = await Task.find({isDone:true,taskOwner:req.query.userID});
+      tasks = await Task.find({isDone:true,taskOwner:claims.id});
     }
 
     
@@ -31,6 +35,10 @@ const getTasks = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
   }
+  }else{
+    res.status(404).json({ error: "unauthorized" });
+  }
+  
 };
 
 const addTask = async (req, res) => {
