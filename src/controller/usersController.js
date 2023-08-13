@@ -51,6 +51,12 @@ const signIn = async (req, res) => {
   }
 
   const checkAuth = async (req, res) => {
-    console.log(req.body)
+    const claims = jwt.verify(req.query.token, "hello");
+    if (!claims) {
+      return res.status(401).json({ message: "unauthorized" });
+    }
+    const { password, ...data } = await User.findOne({ _id: claims.id });
+  
+    res.json(data);
   }
 module.exports = {signUp,signIn,checkAuth}

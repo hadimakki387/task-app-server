@@ -30,6 +30,6 @@ router.post("/sign-up", signUp);
 // Register User
 router.post("/sign-in", signIn);
 
-router.post("/auth",checkAuth)
+router.get("/auth",checkAuth)
 
 module.exports = router;
