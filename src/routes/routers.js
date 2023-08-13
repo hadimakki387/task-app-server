@@ -7,7 +7,7 @@ const {
   setTaskDone,
   editTask,
 } = require("../controller/tasksController");
-const { signUp } = require("../controller/usersController");
+const { signUp, signIn } = require("../controller/usersController");
 
 // Get all tasks
 router.get("/home", getTasks);
@@ -26,6 +26,9 @@ router.post("/edit-task", editTask);
 
 // Register User
 router.post("/sign-up", signUp);
+
+// Register User
+router.post("/sign-in", signIn);
 
 
 module.exports = router;
