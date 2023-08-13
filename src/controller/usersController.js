@@ -57,16 +57,28 @@ const signIn = async (req, res) => {
 };
 
 const checkAuth = async (req, res) => {
-  if (req.query.token) {
-    const claims = jwt.verify(req.query.token, "hello");
+  const token = req.query.token;
+
+  if (!token) {
+    return res.status(404).json({ error: "unauthorized" });
+  }
+
+  try {
+    const claims = jwt.verify(token, "hello");
     if (!claims) {
       return res.status(401).json({ message: "unauthorized" });
     }
+
     const { password, ...data } = await User.findOne({ _id: claims.id });
 
-    res.status(200).json({ error: "Internal server error" ,data:data});
-  }else{
-    res.status(404).json({ error: "unauthorized" });
+    res.status(200).json({ data });
+  } catch (error) {
+    if (error instanceof jwt.JsonWebTokenError) {
+      return res.status(401).json({ message: "invalid token" });
+    }
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
+
 module.exports = { signUp, signIn, checkAuth };
