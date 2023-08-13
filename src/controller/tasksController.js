@@ -39,16 +39,20 @@ const getTasks = async (req, res) => {
 };
 
 const addTask = async (req, res) => {
- 
   const claims = jwt.verify(req.body.token, "hello");
-  console.log(claims)
-  // try {
-  //   const task = new Task(req.body);
-  //   await task.save();
-  //   res.json({ message: "Task added" });
-  // } catch (error) {
-  //   res.status(500).json({ error: "Internal server error" });
-  // }
+  console.log(req.body)
+  try {
+    const task = new Task({
+      title:req.body.title,
+      dueDate:req.body.dueDate,
+      description:req.body.description,
+      taskOwner:claims.id
+    });
+    await task.save();
+    res.json({ message: "Task added" });
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
 };
 
 const removeTask = async (req, res) => {
