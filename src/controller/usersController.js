@@ -50,4 +50,7 @@ const signIn = async (req, res) => {
     }
   }
 
-module.exports = {signUp,signIn}
+  const checkAuth = async (req, res) => {
+    console.log(req.body)
+  }
+module.exports = {signUp,signIn,checkAuth}
