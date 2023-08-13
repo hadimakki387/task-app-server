@@ -6,8 +6,8 @@ const {
   removeTask,
   setTaskDone,
   editTask,
-  signUp
 } = require("../controller/tasksController");
+const { signUp } = require("../controller/usersController");
 
 // Get all tasks
 router.get("/home", getTasks);
