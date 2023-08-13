@@ -7,7 +7,7 @@ const {
   setTaskDone,
   editTask,
 } = require("../controller/tasksController");
-const { signUp, signIn } = require("../controller/usersController");
+const { signUp, signIn, checkAuth } = require("../controller/usersController");
 
 // Get all tasks
 router.get("/home", getTasks);
@@ -30,5 +30,6 @@ router.post("/sign-up", signUp);
 // Register User
 router.post("/sign-in", signIn);
 
+router.get("/auth",checkAuth)
 
 module.exports = router;
