@@ -5,6 +5,7 @@ const {
   addTask,
   removeTask,
   setTaskDone,
+  editTask
 } = require("../controller/tasksController");
 
 // Get all tasks
@@ -18,5 +19,8 @@ router.post("/remove-task", removeTask);
 
 // Check task done
 router.post("/check-done-task", setTaskDone);
+
+// Edit a task
+router.post("/edit-task", editTask);
 
 module.exports = router;

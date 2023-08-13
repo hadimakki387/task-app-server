@@ -64,5 +64,17 @@ const setTaskDone = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 }
+const editTask = async (req, res) => {
+  try {
+    const { data, id } = req.body;
+    if (!data || !id) {
+      return res.status(400).json({ error: "Data and ID are required" });
+    }
+    await Task.findByIdAndUpdate(id, data);
+    res.json({ message: "Task updated" });
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
 
-module.exports = { getTasks, addTask ,removeTask,setTaskDone};
+module.exports = { getTasks, addTask ,removeTask,setTaskDone,editTask};
