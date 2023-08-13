@@ -5,7 +5,8 @@ const {
   addTask,
   removeTask,
   setTaskDone,
-  editTask
+  editTask,
+  signUp
 } = require("../controller/tasksController");
 
 // Get all tasks
@@ -22,5 +23,9 @@ router.post("/check-done-task", setTaskDone);
 
 // Edit a task
 router.post("/edit-task", editTask);
+
+// Register User
+router.post("/sign-up", signUp);
+
 
 module.exports = router;
