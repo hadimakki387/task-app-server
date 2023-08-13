@@ -18,9 +18,6 @@ const getTasks = async (req, res) => {
     if(req.query.cat === "Done"){
       tasks = await Task.find({isDone:true,taskOwner:claims.id});
     }
-
-    
- 
     const { page, limit } = req.query;
 
     const startIndex = (page - 1) * limit;
@@ -42,13 +39,16 @@ const getTasks = async (req, res) => {
 };
 
 const addTask = async (req, res) => {
-  try {
-    const task = new Task(req.body);
-    await task.save();
-    res.json({ message: "Task added" });
-  } catch (error) {
-    res.status(500).json({ error: "Internal server error" });
-  }
+ 
+  const claims = jwt.verify(req.body.token, "hello");
+  console.log(claims)
+  // try {
+  //   const task = new Task(req.body);
+  //   await task.save();
+  //   res.json({ message: "Task added" });
+  // } catch (error) {
+  //   res.status(500).json({ error: "Internal server error" });
+  // }
 };
 
 const removeTask = async (req, res) => {
